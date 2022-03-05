@@ -6,10 +6,9 @@ const myInches = document.getElementById("inches");
 const myWeight = document.getElementById("weight");
 const myDiet = document.getElementById("diet");
 const submitBtn = document.getElementById("btn");
-submitBtn.addEventListener("click", btnClick);
 const myGrid = document.getElementById("grid");
 // Global variables
-let _creatures = [];
+let creatures = [];
 let human = { height: 0, name: "Human", species: "Human", weight: 0 };
 // Selection of properties which may be displayed
 const keys = ["fact", "heightInfo", "weightInfo", "dietInfo", "habitat", "era"];
@@ -17,13 +16,13 @@ const keys = ["fact", "heightInfo", "weightInfo", "dietInfo", "habitat", "era"];
 // Create Dino
 class Dino {
   constructor(dino) {
-    (this.diet = dino.diet),
-      (this.fact = dino.fact),
-      (this.height = parseInt(dino.height)),
-      (this.species = dino.species),
-      (this.weight = parseInt(dino.weight)),
-      (this.when = dino.when),
-      (this.where = dino.where);
+    this.diet = dino.diet;
+    this.fact = dino.fact;
+    this.height = parseFloat(dino.height);
+    this.species = dino.species;
+    this.weight = parseFloat(dino.weight);
+    this.when = dino.when;
+    this.where = dino.where;
   }
   get heightInfo() {
     if (this.height > human.height) {
@@ -90,10 +89,10 @@ class Dino {
   const res = await fetch("dino.json");
   const data = await res.json();
   data.Dinos.forEach((el) => {
-    if (_creatures.length === 4) {
-      _creatures.push(human);
+    if (creatures.length === 4) {
+      creatures.push(human);
     }
-    _creatures.push(new Dino(el));
+    creatures.push(new Dino(el));
   });
 })();
 
@@ -103,18 +102,18 @@ function completeHuman() {
     human.name = myName.value;
   }
   if (myInches.value !== "" || myFeet.value !== "") {
-    human.height = parseInt(myFeet.value * 12) + parseInt(myInches.value);
+    human.height = parseFloat(myFeet.value * 12) + parseFloat(myInches.value);
   }
   if (myWeight.value !== "") {
-    human.weight = parseInt(myWeight.value);
+    human.weight = parseFloat(myWeight.value);
   }
   human.diet = myDiet.value.toLowerCase();
-  _creatures[4] = human;
+  creatures[4] = human;
 }
 
 // Generate Tiles for each Dino in Array and add Tiles to the DOM
 function makeGrid() {
-  _creatures.forEach((el) => {
+  creatures.forEach((el) => {
     const tile = document.createElement("div");
     const name = document.createElement("h3");
     const image = document.createElement("img");
@@ -150,3 +149,4 @@ function btnClick() {
   completeHuman();
   makeGrid();
 }
+submitBtn.addEventListener("click", btnClick);
